@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from multimedia import Multimedia
 
 @dataclass
-class Video:
+class Frame:
     text_desciription: str
     embedding: list
     path: str
