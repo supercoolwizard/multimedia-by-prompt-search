@@ -1,6 +1,7 @@
 import subprocess
 from pathlib import Path
 import json
+import numpy as np
 
 class VideoToImageService:
     def video_frame_to_array_ffmpeg(self, video_path, timestamp):

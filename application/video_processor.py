@@ -8,7 +8,7 @@ class VideoProcessor:
         self.vtis = video_to_image_service
 
     def process(self, video_path):
-        timestamps = self.slicer(video_path)
+        timestamps = self.slicer.slice(video_path)
 
         for timestamp in timestamps:
             frame = self.vtis.video_frame_to_array_ffmpeg(video_path, timestamp)
