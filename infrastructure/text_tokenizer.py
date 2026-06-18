@@ -1,8 +1,8 @@
 from transformers import AutoTokenizer
 
 class Tokenizer:
-    def __init__(self):
-        self.tokenizer = AutoTokenizer.from_pretrained("BAAI/bge-large-en-v1.5")
+    def __init__(self, model_name):
+        self.tokenizer = AutoTokenizer.from_pretrained(model_name)
 
     def tokenize(self, text):
         tokens = self.tokenizer.tokenize(text)

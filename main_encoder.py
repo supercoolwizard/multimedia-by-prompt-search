@@ -1,14 +1,18 @@
 from pathlib import Path
+from services.fastvlm.app import FastVLMDescriber
 from settings import TARGET_DIR
 from infrastructure.multimedia_type_detector import MultimediaTypeFinder
 from infrastructure.video_to_image_by_timestamp import VideoToImageService
 from application.image_processor import ImageProcessor
 from application.video_processor import VideoProcessor
 
+
+
+
 mtf = MultimediaTypeFinder()
-describer = Describer()
+describer = FastVLMDescriber()
 encoder = Encoder()
-tokenizer = Tokenizer()
+tokenizer = Tokenizer("BAAI/bge-large-en-v1.5")
 slicer = VideoSlicer()
 vtis = VideoToImageService()
 

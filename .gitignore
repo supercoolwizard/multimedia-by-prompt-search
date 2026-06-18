@@ -2,4 +2,6 @@
 .venv
 images
 .DS_Store
+services/fastvlm/models
+
 __pycache__/
