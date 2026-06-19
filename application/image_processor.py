@@ -1,4 +1,4 @@
-from domain.image import Image
+from domain.image import DomainImage
 from application.multimedia_processor import MultimediaProcessorStrategy
 from PIL import Image
 
@@ -14,11 +14,11 @@ class ImageProcessor(MultimediaProcessorStrategy):
     def process(self, image_path):
         image = self.image_preprocessor(image_path)
         description = self.describer.describe(image)
-        embeddings = self.encoder.encode(description)
+        vector = self.encoder.encode(description)
 
-        image_data = Image(
-            text_desciription=description,
-            embedding=embeddings,
+        image_data = DomainImage(
+            text_description=description,
+            vector=vector,
             path=image_path,
         )
 

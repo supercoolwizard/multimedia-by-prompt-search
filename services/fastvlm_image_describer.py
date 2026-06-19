@@ -5,17 +5,18 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 
 
 class FastVLMImageDescriber(ImageDescriber):
-    def __init__(self):
+    def __init__(self, hf_token):
         self.model_name = "apple/FastVLM-0.5B"
         self.messages = [
             {"role": "user", "content": "<image>\nDescribe this image in detail."}
         ]
-        self.tokenizer = AutoTokenizer.from_pretrained(self.model_name, trust_remote_code=True)
+        self.tokenizer = AutoTokenizer.from_pretrained(self.model_name, trust_remote_code=True, token=hf_token)
         self.model = AutoModelForCausalLM.from_pretrained(
             self.model_name,
             torch_dtype=torch.float16 if torch.cuda.is_available() else torch.float32,
             device_map="auto",
             trust_remote_code=True,
+            token=hf_token
         )
 
 

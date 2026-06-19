@@ -1,20 +1,24 @@
 from unittest.mock import Mock
 from application.image_processor import ImageProcessor
 
-def test_process_image_calls_dependencies_in_order():
+def test_process_image_pipeline():
     describer = Mock()
-    tokenizer = Mock()
     encoder = Mock()
 
-    describer.describe.return_value = "a terrified cat with a terrified emoji over it"
-    tokenizer.tokenize.return_value = ["a", "terrified", "cat", "with", "a", "terrified", "emoji", "over", "it"]
-    encoder.encode.return_value = [0.123, -0.123, 0.001]
+    describer.describe.return_value = "a cat"
+    encoder.encode.return_value = [0.1, 0.2, 0.3]
 
-    processor = ImageProcessor(describer, tokenizer, encoder)
+    processor = ImageProcessor(describer, encoder)
 
-    image_data = processor.process("image.jpg")
+    fake_image = object()
+    processor.image_preprocessor = Mock(return_value=fake_image)
 
-    assert image_data.text_desciription == "a terrified cat with a terrified emoji over it"
-    assert image_data.embedding == [0.123, -0.123, 0.001]
-    assert image_data.path == "image.jpg"
+    result = processor.process("image.jpg")
 
+    processor.image_preprocessor.assert_called_once_with("image.jpg")
+    describer.describe.assert_called_once_with(fake_image)
+    encoder.encode.assert_called_once_with("a cat")
+
+    assert result.text_desciription == "a cat"
+    assert result.embedding == [0.1, 0.2, 0.3]
+    assert result.path == "image.jpg"

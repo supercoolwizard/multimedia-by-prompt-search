@@ -1,8 +1,9 @@
 from dataclasses import dataclass
 
 @dataclass
-class Multimedia:
-    text_description: str
+class VectorRecord:
+    id: str
     vector: list
-    path: str
+    metadata: dict
+
 

@@ -13,11 +13,11 @@ class VideoProcessor:
             frame = self.vtis.video_frame_to_array_ffmpeg(video_path, timestamp)
 
             description = self.describer.describe(frame)
-            embeddings = self.encoder.encode(description)
+            vector = self.encoder.encode(description)
 
             frame_data = Frame(
-                text_desciription=description,
-                embedding=embeddings,
+                text_description=description,
+                vector=vector,
                 path=video_path,
                 timestamp=timestamp,
             )

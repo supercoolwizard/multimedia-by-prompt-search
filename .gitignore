@@ -5,3 +5,7 @@ images
 services/fastvlm/models
 
 __pycache__/
+config.env
+*.env
+
+data/*
