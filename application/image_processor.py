@@ -3,9 +3,8 @@ from application.multimedia_processor import MultimediaProcessorStrategy
 from PIL import Image
 
 class ImageProcessor(MultimediaProcessorStrategy):
-    def __init__(self, describer, tokenizer, encoder):
+    def __init__(self, describer, encoder):
         self.describer = describer
-        self.tokenizer = tokenizer
         self.encoder = encoder
 
     def image_preprocessor(self, image_path):
@@ -15,8 +14,7 @@ class ImageProcessor(MultimediaProcessorStrategy):
     def process(self, image_path):
         image = self.image_preprocessor(image_path)
         description = self.describer.describe(image)
-        tokens = self.tokenizer.tokenize(description)
-        embeddings = self.encoder.encode(tokens)
+        embeddings = self.encoder.encode(description)
 
         image_data = Image(
             text_desciription=description,
