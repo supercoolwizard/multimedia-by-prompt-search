@@ -12,6 +12,8 @@ class QdrantVectorDatabase:
         self.client = QdrantClient(path="data/qdrant")
         self.distance = Distance.COSINE
 
+
+    def create_collection(self):
         self.client.recreate_collection(
             collection_name=self.collection_name,
             vectors_config=VectorParams(
@@ -19,6 +21,7 @@ class QdrantVectorDatabase:
                 distance=Distance.COSINE
             )
         )
+
 
     def upsert(self, record):
         point = PointStruct(
@@ -32,21 +35,6 @@ class QdrantVectorDatabase:
             points=[point]
         )
 
-    # def create(self, id, vector, text_description, path, timestamp=None):
-    #     self.client.upsert(
-    #         collection_name=self.collection_name,
-    #         points=[
-    #             PointStruct(
-    #                 id=id,
-    #                 vector=vector,
-    #                 payload={
-    #                     "text_description": text_description,
-    #                     "path": path
-    #                     "timestamp": timestamp
-    #                 }
-    #             )
-    #         ]
-    #     )
 
     def search(self, query_vector, limit):
         hits = self.client.query_points(

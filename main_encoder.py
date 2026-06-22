@@ -22,8 +22,10 @@ describer = FastVLMImageDescriber(hf_token)
 encoder = BGEEncoder(hf_token)
 slicer = VideoSlicer()
 vtis = VideoToImageService()
-db = QdrantVectorDatabase()
 db_processor = VectorDBProcessor()
+
+db = QdrantVectorDatabase()
+db.create_collection()
 
 image_processor = ImageProcessor(describer, encoder)
 video_processor = VideoProcessor(slicer, describer, vtis)
@@ -36,4 +38,5 @@ filled_entities = runner.execute()
 for entity in filled_entities:
     record = db_processor.to_record(entity)
     db.upsert(record)
+
 

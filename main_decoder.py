@@ -14,8 +14,12 @@ mtf = MultimediaTypeFinder()
 db_processor = VectorDBProcessor()
 
 prompt = "image of a cat with emoji overlay"
-encoded_prompt = encoder.encode(prompt)
-db.search(encoded_prompt, 1)
+encoded_prompt = encoder.encode(prompt)[0]
+
+results = db.search(encoded_prompt, 1)
+print(results)
+
+db.client.close()
 
 # points, next_page_offset = db.client.scroll(
 #     collection_name="multimedia",
