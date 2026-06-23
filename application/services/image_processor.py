@@ -1,5 +1,5 @@
 from domain.image import DomainImage
-from application.multimedia_processor import MultimediaProcessorStrategy
+from application.services.multimedia_processor import MultimediaProcessorStrategy
 from PIL import Image
 
 class ImageProcessor(MultimediaProcessorStrategy):

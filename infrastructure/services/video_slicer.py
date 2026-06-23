@@ -21,4 +21,4 @@ class VideoSlicer:
 
     def slice(self, video_path):
         duration = self.get_video_duration(video_path)
-        return [0, duration]
+        return [0, duration-1]

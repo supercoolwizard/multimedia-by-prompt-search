@@ -1,20 +1,22 @@
 from pathlib import Path
-from application.multimedia_dispatcher import MultimediaDispatcher
-from application.vector_db_processor import VectorDBProcessor
-from infrastructure.video_slicer import VideoSlicer
-from services.bge_small_encoder import BGEEncoder
-from services.fastvlm_image_describer import FastVLMImageDescriber
-from services.qdrant_vdb import QdrantVectorDatabase
-from settings import TARGET_DIR
-from infrastructure.multimedia_type_detector import MultimediaTypeFinder
-from infrastructure.video_to_image_by_timestamp import VideoToImageService
-from application.image_processor import ImageProcessor
-from application.video_processor import VideoProcessor
-from application.process_directory_use_case import ProcessDirectoryUseCase
 from dotenv import load_dotenv
 import os
 
-load_dotenv()
+from settings import TARGET_DIR
+
+from application.services.multimedia_dispatcher import MultimediaDispatcher
+from infrastructure.services.video_slicer import VideoSlicer
+from infrastructure.bge_small_encoder import BGEEncoder
+from infrastructure.fastvlm_image_describer import FastVLMImageDescriber
+from infrastructure.qdrant_vdb import QdrantVectorDatabase
+from infrastructure.services.multimedia_type_detector import MultimediaTypeFinder
+from infrastructure.services.video_to_image_service import VideoToImageService
+from application.services.image_processor import ImageProcessor
+from application.services.video_processor import VideoProcessor
+from application.process_directory_use_case import ProcessDirectoryUseCase
+from application.vector_db_processor import VectorDBProcessor
+
+load_dotenv("config.env")
 hf_token = os.getenv("HF_TOKEN")
 
 mtf = MultimediaTypeFinder()
@@ -28,7 +30,7 @@ db = QdrantVectorDatabase()
 db.create_collection()
 
 image_processor = ImageProcessor(describer, encoder)
-video_processor = VideoProcessor(slicer, describer, vtis)
+video_processor = VideoProcessor(slicer, describer, encoder, vtis)
 
 dispatcher = MultimediaDispatcher(image_processor, video_processor)
 runner = ProcessDirectoryUseCase(mtf, dispatcher, TARGET_DIR)

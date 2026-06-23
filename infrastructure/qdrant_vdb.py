@@ -1,3 +1,4 @@
+from application.ports.vector_database import VectorDatabase
 from qdrant_client import QdrantClient
 from qdrant_client.models import (
     Distance,
@@ -5,7 +6,7 @@ from qdrant_client.models import (
     PointStruct
 )
 
-class QdrantVectorDatabase:
+class QdrantVectorDatabase(VectorDatabase):
     def __init__(self):
         self.collection_name = "multimedia"
         self.size = 384

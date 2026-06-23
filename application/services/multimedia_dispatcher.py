@@ -1,4 +1,3 @@
-
 class MultimediaDispatcher:
     def __init__(self, image_processor, video_processor):
         self._strategies = {

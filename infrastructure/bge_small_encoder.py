@@ -1,4 +1,4 @@
-from infrastructure.text_encoder import TextEncoder
+from application.ports.text_encoder import TextEncoder
 from transformers import AutoTokenizer, AutoModel
 import torch
 

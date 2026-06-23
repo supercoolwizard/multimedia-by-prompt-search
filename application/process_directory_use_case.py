@@ -1,4 +1,3 @@
-
 class ProcessDirectoryUseCase:
     def __init__(self, mtf, dispatcher, target_dir):
         self.mtf = mtf

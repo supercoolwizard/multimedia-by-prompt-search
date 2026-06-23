@@ -41,7 +41,12 @@ class VideoToImageService:
         w = info["streams"][0]["width"]
         h = info["streams"][0]["height"]
 
-        frame = np.frombuffer(out, np.uint8).reshape((h, w, 3))
+        frame = (
+            np.frombuffer(out, np.uint8)
+            .reshape((h, w, 3))
+            .copy()
+        )
+
         return frame
 
 

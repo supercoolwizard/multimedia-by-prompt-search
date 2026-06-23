@@ -1,4 +1,4 @@
-from infrastructure.image_describer import ImageDescriber
+from application.ports.image_describer import ImageDescriber
 import torch
 from PIL import Image
 from transformers import AutoTokenizer, AutoModelForCausalLM
@@ -13,7 +13,7 @@ class FastVLMImageDescriber(ImageDescriber):
         self.tokenizer = AutoTokenizer.from_pretrained(self.model_name, trust_remote_code=True, token=hf_token)
         self.model = AutoModelForCausalLM.from_pretrained(
             self.model_name,
-            torch_dtype=torch.float16 if torch.cuda.is_available() else torch.float32,
+            dtype=torch.float16 if torch.cuda.is_available() else torch.float32,
             device_map="auto",
             trust_remote_code=True,
             token=hf_token
