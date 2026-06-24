@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 @dataclass
 class Multimedia:
-    text_description: str
+    id: int
     vector: list
-    path: str
+    metadata: dict
 

@@ -5,7 +5,7 @@ class MultimediaDispatcher:
             "video": video_processor,
         }
 
-    def dispatch(self, media_type, path):
+    def dispatch(self, media_type, path, id):
         use_case = self._strategies.get(media_type)
 
-        return use_case.process(path)
+        return use_case.process(path, id)

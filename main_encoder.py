@@ -2,6 +2,8 @@ from pathlib import Path
 from dotenv import load_dotenv
 import os
 
+from application.process_vector_db_use_case import ProcessVectorDBUseCase
+from infrastructure.services.id_generator import IdGenerator
 from settings import TARGET_DIR
 
 from application.services.multimedia_dispatcher import MultimediaDispatcher
@@ -14,31 +16,26 @@ from infrastructure.services.video_to_image_service import VideoToImageService
 from application.services.image_processor import ImageProcessor
 from application.services.video_processor import VideoProcessor
 from application.process_directory_use_case import ProcessDirectoryUseCase
-from application.vector_db_processor import VectorDBProcessor
 
 load_dotenv("config.env")
 hf_token = os.getenv("HF_TOKEN")
 
-mtf = MultimediaTypeFinder()
+type_finder = MultimediaTypeFinder()
 describer = FastVLMImageDescriber(hf_token)
 encoder = BGEEncoder(hf_token)
 slicer = VideoSlicer()
 vtis = VideoToImageService()
-db_processor = VectorDBProcessor()
 
-db = QdrantVectorDatabase()
-db.create_collection()
+id_generator = IdGenerator()
 
 image_processor = ImageProcessor(describer, encoder)
 video_processor = VideoProcessor(slicer, describer, encoder, vtis)
 
 dispatcher = MultimediaDispatcher(image_processor, video_processor)
-runner = ProcessDirectoryUseCase(mtf, dispatcher, TARGET_DIR)
+runner = ProcessDirectoryUseCase(type_finder, dispatcher, TARGET_DIR, id_generator)
+
+db = QdrantVectorDatabase()
+db_processor = ProcessVectorDBUseCase(db)
 
 filled_entities = runner.execute()
-
-for entity in filled_entities:
-    record = db_processor.to_record(entity)
-    db.upsert(record)
-
-
+db_processor.execute(filled_entities)

@@ -7,9 +7,6 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 class FastVLMImageDescriber(ImageDescriber):
     def __init__(self, hf_token):
         self.model_name = "apple/FastVLM-0.5B"
-        self.messages = [
-            {"role": "user", "content": "<image>\nDescribe this image in detail."}
-        ]
         self.tokenizer = AutoTokenizer.from_pretrained(self.model_name, trust_remote_code=True, token=hf_token)
         self.model = AutoModelForCausalLM.from_pretrained(
             self.model_name,
@@ -19,9 +16,12 @@ class FastVLMImageDescriber(ImageDescriber):
             token=hf_token
         )
 
+    def describe(self, image, prompt):
+        messages = [
+            {"role": "user", "content": f"<image>\n{prompt}"}
+        ]
 
-    def describe(self, image):
-        rendered = self.tokenizer.apply_chat_template(self.messages, add_generation_prompt=True, tokenize=False)
+        rendered = self.tokenizer.apply_chat_template(messages, add_generation_prompt=True, tokenize=False)
         pre, post = rendered.split("<image>", 1)
 
         pre_ids  = self.tokenizer(pre,  return_tensors="pt", add_special_tokens=False).input_ids
