@@ -17,4 +17,4 @@ class BGEEncoder(TextEncoder):
             sentence_embeddings = model_output[0][:, 0]
 
         sentence_embeddings = torch.nn.functional.normalize(sentence_embeddings, p=2, dim=1)
-        return sentence_embeddings.tolist()
+        return sentence_embeddings.tolist()[0]

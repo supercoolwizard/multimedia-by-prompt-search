@@ -1,6 +1,11 @@
-from main_encoder import db
+from qdrant_client import QdrantClient
+from qdrant_client.models import VectorParams, Distance
 
-points, next_page_offset = db.client.scroll(
+client = QdrantClient(path="data/qdrant")
+info = client.get_collection("multimedia")
+
+
+points, next_page_offset = client.scroll(
     collection_name="multimedia",
     limit=10,
     with_vectors=True,
@@ -14,4 +19,4 @@ for p in points:
     print("-" * 40)
 
 
-db.client.close()
+client.close()
