@@ -5,16 +5,19 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 
 
 class FastVLMImageDescriber(ImageDescriber):
-    def __init__(self, hf_token):
+    def __init__(self, hf_token, config):
         self.model_name = "apple/FastVLM-0.5B"
-        self.tokenizer = AutoTokenizer.from_pretrained(self.model_name, trust_remote_code=True, token=hf_token)
+        self.tokenizer = AutoTokenizer.from_pretrained(
+            self.model_name, 
+            trust_remote_code=True, 
+            token=hf_token,
+        )
         self.model = AutoModelForCausalLM.from_pretrained(
             self.model_name,
-            dtype=torch.float16 if torch.cuda.is_available() else torch.float32,
-            device_map="auto",
+            dtype=config.dtype,
             trust_remote_code=True,
-            token=hf_token
-        )
+            token=hf_token,
+        ).to(config.device)
 
     def describe(self, image, prompt):
         messages = [
@@ -34,12 +37,12 @@ class FastVLMImageDescriber(ImageDescriber):
         px = self.model.get_vision_tower().image_processor(images=image, return_tensors="pt")["pixel_values"]
         px = px.to(self.model.device, dtype=self.model.dtype)
 
-        with torch.no_grad():
+        with torch.inference_mode():
             out = self.model.generate(
                 inputs=input_ids,
                 attention_mask=attention_mask,
                 images=px,
-                max_new_tokens=128,
+                max_new_tokens=64,
             )
         return self.tokenizer.decode(out[0], skip_special_tokens=True)
 

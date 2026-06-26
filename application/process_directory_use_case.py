@@ -1,3 +1,6 @@
+from rich.progress import Progress
+from time import perf_counter
+
 class ProcessDirectoryUseCase:
     def __init__(self, type_finder, dispatcher, target_dir, id_generator):
         self.type_finder = type_finder
@@ -8,11 +11,33 @@ class ProcessDirectoryUseCase:
     def execute(self):
         results = []
 
-        for file_path in self.target_dir.iterdir():
-            file_path = str(file_path)
-            current_id = self.id_generator.generate_id(file_path)
-            media_type = self.type_finder.find_type(file_path)
-            result = self.dispatcher.dispatch(media_type, file_path, current_id)
-            results.extend(result)
+        files = list(self.target_dir.iterdir())
+
+        with Progress() as progress:
+            task = progress.add_task(
+                "[green]Processing files...", total=len(files)
+            )
+
+            for file_path in files:
+                start = perf_counter()
+
+                file_path = str(file_path)
+                current_id = self.id_generator.generate_id(file_path)
+                media_type = self.type_finder.find_type(file_path)
+
+                result = self.dispatcher.dispatch(
+                    media_type,
+                    file_path,
+                    current_id,
+                )
+
+                results.extend(result)
+
+                elapsed = perf_counter() - start
+                progress.console.print(
+                    f"{file_path}: {elapsed:.2f}s"
+                )
+
+                progress.advance(task)
 
         return results
