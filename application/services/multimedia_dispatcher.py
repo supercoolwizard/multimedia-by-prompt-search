@@ -7,5 +7,4 @@ class MultimediaDispatcher:
 
     def dispatch(self, media_type, path, id):
         use_case = self._strategies.get(media_type)
-
         return use_case.process(path, id)

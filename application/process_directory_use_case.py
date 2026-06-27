@@ -25,6 +25,10 @@ class ProcessDirectoryUseCase:
                 current_id = self.id_generator.generate_id(file_path)
                 media_type = self.type_finder.find_type(file_path)
 
+                if media_type is None:
+                    progress.advance(task)
+                    continue
+
                 result = self.dispatcher.dispatch(
                     media_type,
                     file_path,
