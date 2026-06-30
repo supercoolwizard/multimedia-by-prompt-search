@@ -10,7 +10,7 @@ class VideoProcessor(MultimediaProcessorStrategy):
         self.vtis = video_to_image_service
         self.prompt = "This is a frame of a video, describe it in detail."
 
-    def process(self, video_path, id):
+    def process(self, video_path, id_generator):
         timestamps = self.slicer.slice(video_path)
 
         frames = []
@@ -29,7 +29,7 @@ class VideoProcessor(MultimediaProcessorStrategy):
             }
 
             frame_data = Multimedia(
-                id=id,
+                id=id_generator.generate_id(description),
                 vector=vector,
                 metadata=metadata,
             )

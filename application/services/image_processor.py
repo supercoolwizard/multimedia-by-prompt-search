@@ -13,7 +13,7 @@ class ImageProcessor(MultimediaProcessorStrategy):
         image = Image.open(image_path).convert("RGB")
         return image
 
-    def process(self, image_path, id):
+    def process(self, image_path, id_generator):
         image = self.image_preprocessor(image_path)
         description = self.describer.describe(image, self.prompt)
         vector = self.encoder.encode(description)
@@ -25,7 +25,7 @@ class ImageProcessor(MultimediaProcessorStrategy):
         }
 
         image_data = Multimedia(
-            id=id,
+            id=id_generator.generate_id(description),
             vector=vector,
             metadata=metadata,
         )

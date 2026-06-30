@@ -6,7 +6,7 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 
 class FastVLMImageDescriber(ImageDescriber):
     def __init__(self, hf_token, config):
-        self.model_name = "apple/FastVLM-0.5B"
+        self.model_name = "apple/FastVLM-1.5B"
         self.tokenizer = AutoTokenizer.from_pretrained(
             self.model_name, 
             trust_remote_code=True, 

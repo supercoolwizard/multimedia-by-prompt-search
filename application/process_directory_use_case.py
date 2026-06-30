@@ -22,7 +22,6 @@ class ProcessDirectoryUseCase:
                 start = perf_counter()
 
                 file_path = str(file_path)
-                current_id = self.id_generator.generate_id(file_path)
                 media_type = self.type_finder.find_type(file_path)
 
                 if media_type is None:
@@ -32,7 +31,7 @@ class ProcessDirectoryUseCase:
                 result = self.dispatcher.dispatch(
                     media_type,
                     file_path,
-                    current_id,
+                    self.id_generator,
                 )
 
                 results.extend(result)
